@@ -1,9 +1,9 @@
 #!/bin/bash
 
 clear_on_exit(){
-	wait
-	rm -rf ${temp_dir} 1>/dev/null 2>&1
-	exit 1
+        wait
+        rm -rf ${temp_dir} 1>/dev/null 2>&1
+        exit 1
 }
 trap clear_on_exit SIGINT
 
@@ -28,7 +28,7 @@ while read -r word; do
 done < ${wordlist}
 
 symbols=("!" "@" "#" "$" "%" "&" "*" "_" "-")
-numbers=({0..999})
+numbers=({0..9999})
 
 evaluate_permutations(){
         first=$(( ${#words[@]} ))
@@ -51,16 +51,16 @@ max_procs=$(nproc)
 printf "Quantos núcleos para a tarefa [1-${max_procs}]? "
 read CPU
 if (( ${CPU} <= ${max_procs} )) && (( ${CPU} >= 1 )); then
-	max_procs=${CPU}
+        max_procs=${CPU}
 else
-	printf "\nNúmero mínimo ou máximo de CPU excedido"
-	exit 1
+        printf "\nNúmero mínimo ou máximo de CPU excedido"
+        exit 1
 fi
 
 count=4
 update_progress(){
-	percent=$((count + 12 ))
-	echo -ne "\rProgresso: [${percent}%]" >&2
+        count=$((count + 12 ))
+        echo -ne "\rProgresso: [${count}%]" >&2
 }
 
 {
@@ -162,13 +162,10 @@ for word1 in ${words[@]}; do
                                 echo "${number}${word1}${word2}${symbol}"
                                 echo "${number}${word1}${symbol}${word2}"
                                 echo "${number}${symbol}${word1}${word2}"
-
-                                #count=$(( count + 12 )) 
-                                #[[ $(declare -f update_progress) ]] && update_progress
                         done
                 done
         done > "${temp_out}" ) &
-        i=$((i+1))
+        i=$(( i+1 ))
         (( i % max_procs == 0 )) && wait
 done
 wait
@@ -176,5 +173,4 @@ wait
 [[ $(declare -f update_progress) ]] && update_progress
 } > "${output_file}"
 #########################################################################
-rm -rf "${temp_dir}"
 clear_on_exit
