@@ -165,7 +165,7 @@ for word1 in ${words[@]}; do
                         done
                 done
         done > "${temp_out}" ) &
-        i=$(( i+1 ))
+        (( i++ ))
         (( i % max_procs == 0 )) && wait
 done
 wait
